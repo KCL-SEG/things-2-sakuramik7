@@ -12,6 +12,8 @@ class TestThingForm(TestCase):
         self.assertIn('name', form.fields)
         self.assertIn('description', form.fields)
         self.assertIn('quantity', form.fields)
+        description_widget = forms.fields['description'].widgets
+        self.assertTrue(isinstance(description_widget, forms.Textarea))
 
     def test_form_accepts_valid_input(self):
         form = ThingForm(data=self.form_input)
@@ -31,3 +33,14 @@ class TestThingForm(TestCase):
         self.form_input['quantity'] = 333
         form = ThingForm(data=self.form_input)
         self.assertFalse(form.is_valid())
+
+    def test_form_has_description_field(self):
+        form = ThingForm()
+        self.assertIn('description', form.fields.keys())
+        field = form.fields['description']
+        self.assertTrue(isinstance(field.widget, forms.Textarea))
+
+    # def tes_form_description_widget(self):
+    #     form = ThingForm()
+    #     description_widget = forms.fields['description'].widget
+    #     self.assertTrue(isinstance(description_widget, forms.Textarea))
